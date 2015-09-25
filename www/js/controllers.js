@@ -4,8 +4,7 @@
 
 	controllers.controller('LoginController', function($scope, $state, ngFB) {
 		
-		$scope.fbLogin = function () {
-			// ngFB.login({scope: 'email,read_stream,publish_actions'}).then(
+		$scope.fbLogin = function () {			
 			ngFB.login({scope: 'email,public_profile'}).then(
 				function (response) {
 					if (response.status === 'connected') {
@@ -16,11 +15,11 @@
 						alert('Facebook login failed');
 					}
 				});
-		};
+		};			
 		
 	});
 	
-	controllers.controller('PerfilController', function ($scope, ngFB) {
+	controllers.controller('PerfilController', function ($scope, $state, ngFB) {
 		ngFB.api({
 			path: '/me',
 			params: {fields: 'id,name'}
@@ -32,6 +31,16 @@
 			function (error) {
 				alert('Facebook error: ' + error.error_description);
 			});
+			
+		$scope.fbLogout = function () {
+			ngFB.logout().then(function (response) {					
+					console.log(response);
+					$state.go('login');
+				// } else {
+				// 	alert('Facebook login failed');
+				// }
+			});
+		};
 	});		
 
 })(angular);
